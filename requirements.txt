@@ -83,7 +83,6 @@ geopy==1.16.0
 gmpy2==2.0.8
 greenlet==0.4.14
 grpcio==1.13.0
-guidata==1.7.6
 guiqwt==3.0.3
 h5py==2.8.0
 HeapDict==1.0.0
