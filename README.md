@@ -1,3 +1,6 @@
+##### Demo
+[LINK To WebAppp](https://estipapp.herokuapp.com/)
+
 ## BNG Data Predictor
 This is a demo project that predicts about the requirements of BNG device using Machine Learning Models deployed using Flask API.
 
@@ -31,12 +34,12 @@ By default, flask will run on port 5000.
 3. Navigate to URL http://localhost:5000
 
 You should be able to view the homepage as below :
-![alt text](/assets/image1.jpeg)
+![alt text](/assets/image1.jpg)
 
 Enter valid numerical values in all 3 input boxes and hit Predict.
 
 If everything goes well, you should  be able to see the predcited vaule on the HTML page!
-![alt text](https://estipapp.herokuapp.com/)
+[LINK To WebAppp](https://estipapp.herokuapp.com/)
 
 4. Inspiration
 [link](https://github.com/krishnaik06/Deployment-flask)
