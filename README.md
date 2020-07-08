@@ -31,12 +31,13 @@ By default, flask will run on port 5000.
 3. Navigate to URL http://localhost:5000
 
 You should be able to view the homepage as below :
-![alt text]()
+![alt text](/assets/image1.jpeg)
 
 Enter valid numerical values in all 3 input boxes and hit Predict.
 
-If everything goes well, you should  be able to see the predcited salary vaule on the HTML page!
-![alt text]()
+If everything goes well, you should  be able to see the predcited vaule on the HTML page!
+![alt text](https://estipapp.herokuapp.com/)
 
 4. Inspiration
+[link](https://github.com/krishnaik06/Deployment-flask)
 
