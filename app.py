@@ -1,11 +1,22 @@
 import numpy as np
 from flask import Flask, request, jsonify, render_template,url_for, redirect
 import pickle
+from sklearn.feature_extraction.text import HashingVectorizer
+import re
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
 
 app = Flask(__name__)
 memoryfree = pickle.load(open('assets/memoryfree.pkl', 'rb'))
 memoryUsed = pickle.load(open('assets/memoryUsed.pkl', 'rb'))
 CPUUtil    = pickle.load(open('assets/processor.pkl', 'rb')) 
+stop = pickle.load(open('assets/stopwords.pkl', 'rb'))
+classifier = pickle.load(open('assets/classifier.pkl', 'rb')) #model
+
+# Global variables for persistence across methods (and requests)
+sentiment_input=""
+sentiment_output=""
 
 @app.route('/')
 def home():
@@ -55,10 +66,34 @@ def bngpredict():
 
     return render_template('bng.html', memory_text='Memory      at least {} GB'.format(output1), processor_text='Processor     more than {} GHz'.format(output2))
 
+def tokenizer(text):
+    text = re.sub('<[^>]*>', '', text)
+    emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(|D|P)', text.lower())
+    text = re.sub('[\W]+', ' ', text.lower()) +\
+        ' '.join(emoticons).replace('-', '')
+    tokenized = [w for w in text.split() if w not in stopwords.words('english')]
+    # this will return the cleaned text
+    return tokenized
 
 @app.route('/sentimentpredict', methods=['POST'])
 def sentimentpredict():
-    return render_template('index.html')
+
+    vect = HashingVectorizer( decode_error='ignore' ,n_features=2**21 ,preprocessor=None,tokenizer=tokenizer )
+
+    # get text from the incoming request (submitted on predict button click)
+    text = request.form['input_text']
+
+    # convert text to model input vector
+    X = vect.transform([text])
+
+    # use classifier's predict method to get prediction
+    y = classifier.predict(X)
+
+    # store model input and output
+    # model_input = text
+    sentiment_output = y[0]
+
+    return render_template('customer.html' , customer_text = ' Sentiments {} '.format(sentiment_output))
 
 @app.route('/save_pred', methods=['POST'])
 def save_pred():
