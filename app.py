@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, render_template,url_for, redirect
 import pickle
 from sklearn.feature_extraction.text import HashingVectorizer
 import re
+import os
 import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
@@ -14,9 +15,6 @@ CPUUtil    = pickle.load(open('assets/processor.pkl', 'rb'))
 stop = pickle.load(open('assets/stopwords.pkl', 'rb'))
 classifier = pickle.load(open('assets/classifier.pkl', 'rb')) #model
 
-# Global variables for persistence across methods (and requests)
-sentiment_input=""
-sentiment_output=""
 
 @app.route('/')
 def home():
@@ -27,6 +25,11 @@ def sentiment():
     '''
     For rendering cutomer page 
     '''
+    IMAGE_FOLDER = os.path.join('static', 'images')
+    app.config['UPLOAD_FOLDER'] = IMAGE_FOLDER
+
+    full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'all.jpg')
+
     return render_template('customer.html')
 
 @app.route('/about/')
@@ -92,12 +95,39 @@ def sentimentpredict():
     # store model input and output
     # model_input = text
     sentiment_output = y[0]
+    proba = np.max(classifier.predict_proba(X))
+    proba = round(proba,2)
 
-    return render_template('customer.html' , customer_text = ' Sentiments {} '.format(sentiment_output))
+    IMAGE_FOLDER = os.path.join('static', 'images')
+    app.config['UPLOAD_FOLDER'] = IMAGE_FOLDER
+    if(sentiment_output == 1 and proba >= 0.9):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'excellent.jpg')
+    elif(proba >= 0.8 and proba < 0.9):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'love.jpg')
+    elif(proba >= 0.7 and proba < 0.8):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'ok.jpg')
+    elif(proba >= 0.6 and proba < 0.7):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'normal.jpg')
+    elif(proba >= 0.5 and proba < 0.6):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'bad.png')
+    elif(proba >= 0.4 and proba < 0.5):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'awful.jpg')
+    elif( proba >= 0.3 and proba < 0.4):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'pain.jpg')
+    elif(proba >= 0.2 and proba < 0.3):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'cry.jpg')
+    elif( proba >= 0.1 and proba < 0.2):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'sad.jpg')
+    elif( proba >= 0.0 and proba < 0.1):
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'terrible.jpg')
+    else:
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'ok.jpg')
 
-@app.route('/save_pred', methods=['POST'])
-def save_pred():
-    return render_template('customer.html', image_filename="img/happy.webp", display_mode="none")
+    # proba = round(proba,1) * 10
+    
+    return render_template('customer.html' , user_image = full_filename, proba='Rating out of 10 {} '.format(proba))
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True)
