@@ -7,18 +7,30 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   </head>
 <body>
+    <div class="nav">
+        <ul style="list-style-type: none;  margin: 0; padding: 0; overflow: hidden; background-color: #333;">
+            <li style="float:left; display: block; color: white;text-align: center;padding: 14px 16px;text-decoration: none;"><a href="/">  HOME   </a></li>
+            <li style="float:left; display: block; color: white;text-align: center;padding: 14px 16px;text-decoration: none;"><a href="/about">  About  </a></li>
+            <li style="float:left; display: block; color: white;text-align: center;padding: 14px 16px;text-decoration: none;"><a href="/bng">  BNG  </a></li>
+
+        </ul>
+    </div>
     
-    <h1>Predict Customer Analysis</h1>
+    <h2>Predict Customer Analysis</h2>
     <div class="customer">
+ 
+        <div>
         <form action="{{ url_for('sentimentpredict')}}"method="post">
     
             <textarea id="input_text" name="input_text" placeholder="Type something!"></textarea>
             <button type="submit" class="pred-btn btn btn-primary btn-block btn-large">Predict</button>
         </form>
+    </div>
         <br>
         <a href="/customer"> <u> Clear the screen </u></a></h2></b>
+<!--         
         <br>
-        <br>
+        <br> -->
         <!-- <div>{{ customer_text }}</div> -->
         <div>
            <img src="../static/images/all.jpg" alt=" Feedback" height='200' width='300' >
