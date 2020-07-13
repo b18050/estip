@@ -1,10 +1,12 @@
 import numpy as np
+import pandas as pd
 from flask import Flask, request, jsonify, render_template,url_for, redirect
 import pickle
 from sklearn.feature_extraction.text import HashingVectorizer
 import re
 import os
 import nltk
+import random
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
@@ -13,8 +15,9 @@ memoryfree = pickle.load(open('assets/memoryfree.pkl', 'rb'))
 memoryUsed = pickle.load(open('assets/memoryUsed.pkl', 'rb'))
 CPUUtil    = pickle.load(open('assets/processor.pkl', 'rb')) 
 stop = pickle.load(open('assets/stopwords.pkl', 'rb'))
-classifier = pickle.load(open('assets/classifier.pkl', 'rb')) #model
-
+classifier = pickle.load(open('assets/classifier.pkl', 'rb')) 
+churn_model = pickle.load(open('assets/model.pkl','rb'))
+churn_columns = pickle.load(open('assets/model_columns.pkl','rb'))
 
 @app.route('/')
 def home():
@@ -25,10 +28,10 @@ def sentiment():
     '''
     For rendering cutomer page 
     '''
-    IMAGE_FOLDER = os.path.join('static', 'images')
-    app.config['UPLOAD_FOLDER'] = IMAGE_FOLDER
+    # IMAGE_FOLDER = os.path.join('static', 'images')
+    # app.config['UPLOAD_FOLDER'] = IMAGE_FOLDER
 
-    full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'all.jpg')
+    # full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'all.jpg')
 
     return render_template('customer.html')
 
@@ -77,6 +80,56 @@ def tokenizer(text):
     tokenized = [w for w in text.split() if w not in stopwords.words('english')]
     # this will return the cleaned text
     return tokenized
+
+def random_bool():
+    return random_number()
+ 
+def random_number(low=0, high=1):
+    return random.randint(low,high)
+
+def generate_data():
+    internetServices = ['DSL', 'Fiber optic', 'No']
+    contracts = ['Month-to-month', 'One year', 'Two year']
+    paymentMethods = ['Electronic check', 'Mailed check', 'Bank transfer (automatic)','Credit card (automatic)']
+ 
+    random_data = {
+            'name':'customer',
+            'Partner': random_bool(),
+            'Dependents': random_bool(),
+            'tenure': random_number(0,50),
+            'PhoneService': random_bool(),
+            'MultipleLines': random_number(-1),
+            'InternetService': random.choice(internetServices),
+            'OnlineSecurity': random_number(-1),
+            'OnlineBackup': random_number(-1),
+            'DeviceProtection': random_number(-1),
+            'TechSupport': random_number(-1),
+            'StreamingTV': random_number(-1),
+            'StreamingMovies': random_number(-1),
+            'Contract': random.choice(contracts),
+            'PaperlessBilling': random_bool(),
+            'PaymentMethod': random.choice(paymentMethods)
+        }
+    return random_data
+
+@app.route('/churnpredict', methods=['POST'])
+def churnpredict():
+    random_user_data = generate_data()
+    query = pd.get_dummies(pd.DataFrame(random_user_data, index=[0]))
+    query = query.reindex(columns=churn_columns, fill_value=0)
+ 
+    #return prediction as probability in percent
+    prediction = round(churn_model.predict_proba(query)[:,1][0], 2)* 100
+    return render_template('churn.html' , proba='Customer has a chance of churn with  {} '.format(int(prediction)))
+
+@app.route('/churn/')
+def churn():
+    '''
+    For rendering churn page 
+    '''
+    return render_template('churn.html')
+
+
 
 @app.route('/sentimentpredict', methods=['POST'])
 def sentimentpredict():
