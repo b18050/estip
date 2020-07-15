@@ -33,7 +33,7 @@ def sentiment():
 
     # full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'all.jpg')
 
-    return render_template('customer.html')
+    return render_template('customer.html' )
 
 @app.route('/about/')
 def about():
@@ -41,6 +41,20 @@ def about():
     For rendering about page 
     '''
     return render_template('about.html')
+
+@app.route('/abouttelecom/')
+def abouttelecom():
+    '''
+    For rendering about page 
+    '''
+    return render_template('abouttelecom.html')
+
+@app.route('/aboutchurn/')
+def aboutchurn():
+    '''
+    For rendering about page 
+    '''
+    return render_template('aboutchurn.html')
 
 @app.route('/bng/')
 def bng():
@@ -176,9 +190,9 @@ def sentimentpredict():
     else:
         full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'ok.jpg')
 
-    # proba = round(proba,1) * 10
+    proba = round(proba,1) * 10
     
-    return render_template('customer.html' , user_image = full_filename, proba='Rating out of 10 {} '.format(proba))
+    return render_template('customer.html' , user_image = full_filename, proba='Rating {} (out of 10)  '.format(proba))
     
 
 
