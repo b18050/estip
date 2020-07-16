@@ -56,6 +56,20 @@ def aboutchurn():
     '''
     return render_template('aboutchurn.html')
 
+@app.route('/aboutsentiment/')
+def aboutsentiment():
+    '''
+    For rendering about page 
+    '''
+    return render_template('aboutsentiment.html')
+
+@app.route('/aboutbng/')
+def aboutbng():
+    '''
+    For rendering about page 
+    '''
+    return render_template('aboutbng.html')
+
 @app.route('/bng/')
 def bng():
     '''
