@@ -2,7 +2,7 @@
 <html >
 <head>
   <meta charset="UTF-8">
-  <title>Customer Sentiment Analysis</title>
+  <title>Customer Churn</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
@@ -20,7 +20,26 @@
     <h1> Customer Churn </h1>
 
 </div>
+<div id="content">
+    <ul>
+        <li style="text-align: left;">bitter truth that every vertical has to deal with. </li>                           
+        <li style="text-align: left;">Address at risk customer :  It is now very easy to know customers at risk, designing right retention strategies for each user takes time.</li>
+        <li style="text-align: left;"> Strategy :
+            <ul>Two stages :   
+                <li style="text-align: left;">Churn in customer’s mind.</li> 
+                <li style="text-align: left;">Actual churn (connection terminated).</li>
+            </ul>
+        </li>
+    </ul>
+    <h2 style="text-align: left;">Specific Model for each user</h2>
+    <ul>
+        <li style="text-align: left;"> on the period of non-usage of service.  </li>                        
+        <li style="text-align: left;">Non use time period: Time period of inactivity is chosen , any user with this is categorised as infected.</li>
+        <li style="text-align: left;">Specific ML model for each user : highlight variables which may lead to churn. e.g. monthly charges, tenure , Internet service uses, feedback,etc. </li>
+        <li style="text-align: left;">Model works at client level.</li>
+    </ul>
 
+</div>
     
       
       
@@ -32,7 +51,8 @@
     text-decoration: none;
     display: inline-block;"href="/about"> Back </a>
     </div>
-  
+    <br>
+    <a href='https://medium.com/@b18050/customer-churn-8b6da705329'>Medium Post</a>
       
     
 </body>
