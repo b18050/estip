@@ -16,7 +16,7 @@ sklearn==0.0
 threadpoolctl==2.1.0
 Werkzeug==1.0.1
 nltk==3.5
-certifi==2018.11.29
+certifi==2022.12.7
 chardet==3.0.4
 idna==2.8
 regex==2020.6.8
